@@ -12,13 +12,15 @@ jobs:
         python-version: ["3.9", "3.10"]
     steps:
       - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
-      - name: Install dependencies
-        run: pipx install poetry && poetry install --no-root
+      - name: Install deps
+        run: poetry install --no-root
       - name: Lint with flake8
         run: poetry run flake8 .
       - name: Lint with black
