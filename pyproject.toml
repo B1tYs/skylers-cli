@@ -18,6 +18,8 @@ typer = {extras = ["all"], version = "^0.6.1"}
 black = {extras = ["d"], version = "^22.8.0"}
 flake8 = "^5.0.4"
 pytest-cov = "^4.0.0"
+# https://github.com/psf/black/issues/1928#issuecomment-910337314
+typing-extensions = "^4.3.0"
 
 
 [tool.poetry.group.test.dependencies]
