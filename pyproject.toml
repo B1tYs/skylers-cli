@@ -17,6 +17,7 @@ typer = {extras = ["all"], version = "^0.6.1"}
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["d"], version = "^22.8.0"}
 flake8 = "^5.0.4"
+pytest-cov = "^4.0.0"
 
 
 [tool.poetry.group.test.dependencies]
