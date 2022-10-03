@@ -1,5 +1,5 @@
 from typer.testing import CliRunner
-from skyler_cli import main
+from skyler_cli.cli import main
 
 runner = CliRunner()
 
