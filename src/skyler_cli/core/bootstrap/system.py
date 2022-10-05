@@ -4,6 +4,7 @@ import chevron
 import importlib.resources
 from skyler_cli.core.bootstrap import system_template
 import shutil
+from multiprocessing import cpu_count
 
 
 class OS(Enum):
@@ -15,6 +16,8 @@ class MachineType(Enum):
     DEV = 0
     SERVER = 1
 
+
+_CPU_CORES = cpu_count()
 
 _BASE_ALIASES = {
     "ls": "ls -F",
@@ -30,9 +33,9 @@ _BASE_ALIASES = {
     "p8": "ping 8.8.8.8",
     "t8": "traceroute 8.8.8.8",
     "src": "source ~/.bash_profile",
-    "make": "make -j 6",
+    "make": f"make -j {_CPU_CORES}",
     "pm": "sudo pacman",
-    "mnv": "mvn -T 6",
+    "mnv": f"mvn -T {_CPU_CORES}",
     "ebrc": "vi ~/.bashrc && source ~/.bashrc",
     "ei3": "vi ~/.config/i3/config",
     "pdb": "python3.9 -m pdb",
@@ -106,6 +109,10 @@ class SystemBootstrapper:
     def _cmd_exists(cmd: str) -> bool:
         return shutil.which(cmd) is not None
 
+    def bootstrap_system(self):
+        self.bootstrap_bashrc()
+        self.bootstrap_initrc()
+
     def bootstrap_bashrc(self) -> None:
         template_data = self._calculate_bashrc_template_data()
         result = chevron.render(self._read_template_resource(".bashrc"), template_data)
@@ -139,3 +146,7 @@ class SystemBootstrapper:
 
         aliases_list = [{"key": k, "value": v} for k, v in alias_dict.items()]
         return aliases_list
+
+    def bootstrap_initrc(self):
+        with (self.home_path / ".inputrc").open("w") as inputrc_f:
+            inputrc_f.write("set editing-mode vi")
