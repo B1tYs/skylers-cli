@@ -1,9 +1,8 @@
-name: publish to pypi
+name: Release to pypi
 on:
   push:
     branches:
       - master
-      - pypi-publishing
 jobs:
   deploy:
     runs-on: ubuntu-latest
