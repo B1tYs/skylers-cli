@@ -1,5 +1,4 @@
 import pytest
-from unittest.mock import Mock, patch
 import shutil
 
 from skyler_cli.core.bootstrap.system import SystemBootstrapper, OS, MachineType

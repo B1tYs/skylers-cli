@@ -89,9 +89,11 @@ class SystemBootstrapper:
         """
 
         :param os: Operating system of the computer to be bootstrapped
-        :param machine_type: Whether the machine is a dev machine (laptop/desktop) vs a server
+        :param machine_type: Whether the machine is a dev machine (laptop/desktop)
+            vs a server
         :param is_personal: Whether this is a personal machine, or a work machine
-        :param home_path: Only used for testing: the home directory to bootstrap configurations in
+        :param home_path: Only used for testing: the home directory to bootstrap
+            configurations in
         """
         self.os = os
         self.machine_type = machine_type
