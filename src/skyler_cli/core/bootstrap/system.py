@@ -7,14 +7,27 @@ import shutil
 from os import makedirs
 
 
+class UnsupportedEnvironmentException(Exception):
+    pass
+
+
 class OS(Enum):
     OS_X = "OS X"
     LINUX = "LINUX"
 
+    @staticmethod
+    def from_sysname(sysname: str):
+        sysname = sysname.lower()
+        if sysname == "darwin":
+            return OS.OS_X
+        if sysname == "linux":
+            return OS.LINUX
+        raise UnsupportedEnvironmentException(f'OS "{sysname}" is not supported')
+
 
 class MachineType(Enum):
-    WORKSTATION = 0
-    SERVER = 1
+    WORKSTATION = "Workstation"
+    SERVER = "Server"
 
 
 _BASE_ALIASES = {
