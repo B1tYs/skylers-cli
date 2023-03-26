@@ -81,7 +81,7 @@ _BASE_ALIASES = {
 }
 
 _PENTESTING_ALIASES = {
-    "imasscan": "sudo masscan --rate=8000 -p=T:1-65535,U:1-65535 -o masscan.out",
+    "imasscan": "sudo masscan --rate 8000 -p T:1-65535,U:1-65535",
     "inmap": "nmap -sC -sV -oN -T4",
 }
 
