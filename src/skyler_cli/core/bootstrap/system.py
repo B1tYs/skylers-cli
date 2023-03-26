@@ -80,6 +80,11 @@ _BASE_ALIASES = {
     "ack": "ag --pager='less -r'",
 }
 
+_PENTESTING_ALIASES = {
+    "imasscan": "sudo masscan --rate=8000 -p=T:1-65535,U:1-65535 -o masscan.out",
+    "inmap": "nmap -sC -sV -oN -T4",
+}
+
 CLIPBOARD_ALIASES = {
     OS.OS_X: {
         "paste": "pbpaste",
@@ -162,6 +167,9 @@ class SystemBootstrapper:
             alias_dict["pm"] = "sudo pacman"
         if self._cmd_exists("nvim"):
             alias_dict["vi"] = "nvim"
+
+        if self.is_personal:
+            alias_dict |= _PENTESTING_ALIASES
 
         if self.machine_type != MachineType.SERVER and self.os in CLIPBOARD_ALIASES:
             alias_dict |= CLIPBOARD_ALIASES[self.os]
