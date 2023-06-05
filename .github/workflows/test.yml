@@ -22,7 +22,7 @@ jobs:
       - name: Install deps
         run: poetry install
       - name: Check commit message(s)
-        run: poetry run cz check --rev-range ${{github.base_ref}}..${{github.head_ref}}
+        run: poetry run cz check --rev-range origin/${{github.base_ref}}..origin/${{github.head_ref}}
       - name: Lint with flake8
         run: poetry run flake8 .
       - name: Lint with black
