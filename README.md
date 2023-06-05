@@ -4,3 +4,14 @@
 This is a modular CLI tool box that I tailor to my needs over time. It includes:
 
 - A command to bootstrap all my . files onto a new workstation
+
+## Installation
+### pipx
+```
+pipx install skyler-cli
+```
+
+### pip
+```
+pip install skyler-cli
+```
