@@ -99,11 +99,11 @@ CLIPBOARD_ALIASES = {
 
 class SystemBootstrapper:
     def __init__(
-        self,
-        os: OS,
-        machine_type: MachineType,
-        is_personal: bool,
-        home_path=Path.home(),
+            self,
+            os: OS,
+            machine_type: MachineType,
+            is_personal: bool,
+            home_path=Path.home(),
     ):
         """
 
@@ -133,9 +133,12 @@ class SystemBootstrapper:
         self.bootstrap_bashrc()
         self.bootstrap_initrc()
         self.bootstrap_tmux_conf()
-        if self.os == OS.LINUX and self.machine_type == MachineType.WORKSTATION:
-            self.bootstrap_compton_conf()
-            self.bootstrap_i3_conf()
+        if self.machine_type == MachineType.WORKSTATION:
+            if self.os == OS.LINUX:
+                self.bootstrap_compton_conf()
+                self.bootstrap_i3_conf()
+            if self._cmd_exists("nvim"):
+                self.bootstrap_vim_conf()
 
     def _setup_config_dir(self):
         makedirs(self.conf_dir_path, exist_ok=True)
@@ -198,4 +201,9 @@ class SystemBootstrapper:
         makedirs(i3_conf_dir, exist_ok=True)
         data = self._read_template_resource("i3_config")
         with (i3_conf_dir / "config").open("w") as f:
+            f.write(data)
+
+    def bootstrap_vim_conf(self) -> None:
+        data = self._read_template_resource("vimrc")
+        with (self.home_path / ".vimrc").open("w") as f:
             f.write(data)
