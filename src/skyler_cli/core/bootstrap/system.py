@@ -3,6 +3,7 @@ from pathlib import Path
 import chevron
 import importlib.resources
 from skyler_cli.core.bootstrap import system_template
+from skyler_cli.core.bootstrap.system_template import neovim_conf
 import shutil
 from os import makedirs
 
@@ -125,6 +126,10 @@ class SystemBootstrapper:
         return importlib.resources.read_text(system_template, resource)
 
     @staticmethod
+    def _list_template_resources(package: str) -> [str]:
+        return list(importlib.resources.files(package).iterdir())
+
+    @staticmethod
     def _cmd_exists(cmd: str) -> bool:
         return shutil.which(cmd) is not None
 
@@ -138,7 +143,7 @@ class SystemBootstrapper:
                 self.bootstrap_compton_conf()
                 self.bootstrap_i3_conf()
             if self._cmd_exists("nvim"):
-                self.bootstrap_vim_conf()
+                self.bootstrap_neovim_conf()
 
     def _setup_config_dir(self):
         makedirs(self.conf_dir_path, exist_ok=True)
@@ -203,7 +208,24 @@ class SystemBootstrapper:
         with (i3_conf_dir / "config").open("w") as f:
             f.write(data)
 
-    def bootstrap_vim_conf(self) -> None:
-        data = self._read_template_resource("vimrc")
-        with (self.home_path / ".vimrc").open("w") as f:
-            f.write(data)
+    def _recursive_copy_module_to_dir(self, module: str | importlib.resources.Package, target_dir: Path):
+        resources = list(importlib.resources.files(module).iterdir())
+        for resource in resources:
+            if resource.name in ('__pycache__', '__init__.py'):
+                continue
+            elif resource.is_dir():
+                self._recursive_copy_module_to_dir(f"{module}.{resource.name}", target_dir / resource.name)
+            else:
+                target_path = target_dir / resource.name
+                try:
+                    data = resource.read_text()
+                except UnicodeDecodeError:
+                    continue
+
+                target_path.parent.mkdir(parents=True, exist_ok=True)
+                with target_path.open('w') as f:
+                    f.write(data)
+
+    def bootstrap_neovim_conf(self) -> None:
+        nvim_conf_dir = self.conf_dir_path / "nvim"
+        self._recursive_copy_module_to_dir('skyler_cli.core.bootstrap.system_template.neovim_conf', nvim_conf_dir)

@@ -107,18 +107,18 @@ class TestStaticFilesBootstrapped:
         system_bootstrapper.os = OS.OS_X
         monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
         system_bootstrapper.bootstrap_system()
-        assert (tmp_path / ".vimrc").exists()
+        assert (tmp_path / ".config" / "nvim" / "init.lua").exists()
 
     def test_no_nvimrc_on_server(self, tmp_path, system_bootstrapper, monkeypatch):
         system_bootstrapper.machine_type = MachineType.SERVER
         system_bootstrapper.os = OS.LINUX
         monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
         system_bootstrapper.bootstrap_system()
-        assert not (tmp_path / ".vimrc").exists()
+        assert not (tmp_path / ".config" / "nvim" / "init.lua").exists()
 
     def test_no_nvimrc_if_no_neovim(self, tmp_path, system_bootstrapper, monkeypatch):
         system_bootstrapper.machine_type = MachineType.WORKSTATION
         system_bootstrapper.os = OS.OS_X
         monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
         system_bootstrapper.bootstrap_system()
-        assert (tmp_path / ".vimrc").exists()
+        assert not (tmp_path / ".config" / "nvim" / "init.lua").exists()
