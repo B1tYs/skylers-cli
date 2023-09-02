@@ -1,8 +1,8 @@
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ','
-vim.g.maplocalleader = ','
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -93,12 +93,13 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    "ellisonleao/gruvbox.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
+      vim.cmd([[colorscheme gruvbox]])
+      vim.o.background = "dark"
+      vim.cmd('autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE')
+    end
   },
 
   {
@@ -127,7 +128,31 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim', opts = {
+    ---LHS of toggle mappings in NORMAL mode
+    toggler = {
+      ---Line-comment toggle keymap
+      line = '<leader>cc',
+      ---Block-comment toggle keymap
+      block = '<leader>bc',
+    },
+    ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+    opleader = {
+      ---Line-comment keymap
+      line = '<leader>c',
+      ---Block-comment keymap
+      block = '<leader>b',
+    },
+    ---LHS of extra mappings
+    extra = {
+      ---Add comment on the line above
+      above = '<leader>cO',
+      ---Add comment on the line below
+      below = '<leader>co',
+      ---Add comment at the end of line
+      eol = '<leader>cA',
+    },
+  } },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -159,19 +184,47 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+  -- Auto close parens, quotes, etc
+  {
+    'm4xshen/autoclose.nvim',
+    opts = {}
+  },
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  },
+  {
+    'nvim-tree/nvim-tree.lua',
+    opts = {},
+    config = function()
+      local function on_attach(bufnr)
+        local api = require("nvim-tree.api")
+        -- api.config.mappings.default_on_attach(bufnr)
+        vim.keymap.set('n', '<C-t>', function()
+          api.tree.close()
+          vim.keymap.set('n', '<C-t>', function()
+            api.tree.focus()
+          end)
+        end
+        )
+      end
+
+      require("nvim-tree").setup({on_attach = on_attach})
+      require("nvim-tree").setup({})
+
+      local api = require("nvim-tree.api")
+      vim.keymap.set('n', '<C-t>', function()
+        api.tree.focus()
+      end)
+    end
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -183,6 +236,8 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+vim.o.number = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -370,8 +425,8 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('?', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('<C-?>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -486,3 +541,9 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Pane switching keymaps
+vim.keymap.set('n', '<C-k>', ':wincmd k\n')
+vim.keymap.set('n', '<C-j>', ':wincmd j\n')
+vim.keymap.set('n', '<C-l>', ':wincmd l\n')
+vim.keymap.set('n', '<C-h>', ':wincmd h\n')
