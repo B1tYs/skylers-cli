@@ -202,27 +202,25 @@ require('lazy').setup({
   },
   {
     'nvim-tree/nvim-tree.lua',
-    opts = {},
     config = function()
+      local api = require("nvim-tree.api")
+      local toggleKeybind = '<C-t>'
       local function on_attach(bufnr)
-        local api = require("nvim-tree.api")
-        -- api.config.mappings.default_on_attach(bufnr)
-        vim.keymap.set('n', '<C-t>', function()
-          api.tree.close()
-          vim.keymap.set('n', '<C-t>', function()
-            api.tree.focus()
-          end)
+        api.config.mappings.default_on_attach(bufnr)
+        
+        local function opts(desc)
+          return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent=true }
         end
-        )
+
+        vim.keymap.set('n', toggleKeybind, api.tree.close, opts('Toggle tree'))
+        vim.keymap.set('n', 't', api.node.open.tab, opts('Open in tab'))
+        vim.keymap.set('n', 'h', api.node.open.horizontal, opts('Open in horizontal split'))
+        vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open in vertical split'))
       end
 
       require("nvim-tree").setup({on_attach = on_attach})
-      require("nvim-tree").setup({})
 
-      local api = require("nvim-tree.api")
-      vim.keymap.set('n', '<C-t>', function()
-        api.tree.focus()
-      end)
+      vim.keymap.set('n', toggleKeybind, api.tree.focus)
     end
   }
 }, {})
@@ -547,3 +545,6 @@ vim.keymap.set('n', '<C-k>', ':wincmd k\n')
 vim.keymap.set('n', '<C-j>', ':wincmd j\n')
 vim.keymap.set('n', '<C-l>', ':wincmd l\n')
 vim.keymap.set('n', '<C-h>', ':wincmd h\n')
+
+vim.keymap.set('n', 'H', ':tabn<CR>')
+vim.keymap.set('n', 'L', ':tabp<CR>')
