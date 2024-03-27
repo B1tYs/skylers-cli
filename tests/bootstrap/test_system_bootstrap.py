@@ -18,7 +18,7 @@ class TestBashrcBootstrap:
         assert (tmp_path / ".bashrc").exists(), ".bashrc should be created"
 
     def test_default_location_for_personal_machines(
-        self, tmp_path, system_bootstrapper
+            self, tmp_path, system_bootstrapper
     ):
         system_bootstrapper.is_personal = True
         system_bootstrapper.bootstrap_system()
@@ -43,7 +43,7 @@ class TestBashrcBootstrap:
             assert 'alias ..="cd .."' in brc
 
     def test_top_alias_if_htop_installed(
-        self, tmp_path, system_bootstrapper, monkeypatch
+            self, tmp_path, system_bootstrapper, monkeypatch
     ):
         monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
         system_bootstrapper.bootstrap_system()
@@ -52,7 +52,7 @@ class TestBashrcBootstrap:
             assert 'alias top="htop"' in brc
 
     def test_no_top_alias_if_htop_not_installed(
-        self, tmp_path, system_bootstrapper, monkeypatch
+            self, tmp_path, system_bootstrapper, monkeypatch
     ):
         monkeypatch.setattr(shutil, "which", lambda x: None)
         system_bootstrapper.bootstrap_system()
@@ -73,7 +73,7 @@ class TestStaticFilesBootstrapped:
     def test_no_compton_conf_on_OSX(self, tmp_path, system_bootstrapper):
         system_bootstrapper.bootstrap_system()
         assert not (
-            tmp_path / ".config" / "compton.conf"
+                tmp_path / ".config" / "compton.conf"
         ).exists(), "compton shouldn't be configured on a mac"
 
     def test_compton_on_linux_workstations(self, tmp_path, system_bootstrapper):
@@ -81,7 +81,7 @@ class TestStaticFilesBootstrapped:
         system_bootstrapper.os = OS.LINUX
         system_bootstrapper.bootstrap_system()
         assert (
-            tmp_path / ".config" / "compton.conf"
+                tmp_path / ".config" / "compton.conf"
         ).exists(), "compton should be configured on a linux workstation"
 
     def test_i3_conf_on_linux_workstations(self, tmp_path, system_bootstrapper):
@@ -101,3 +101,24 @@ class TestStaticFilesBootstrapped:
         system_bootstrapper.os = OS.LINUX
         system_bootstrapper.bootstrap_system()
         assert not (tmp_path / ".config/i3/config").exists()
+
+    def test_nvimrc_on_workstation(self, tmp_path, system_bootstrapper, monkeypatch):
+        system_bootstrapper.machine_type = MachineType.WORKSTATION
+        system_bootstrapper.os = OS.OS_X
+        monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
+        system_bootstrapper.bootstrap_system()
+        assert (tmp_path / ".config" / "nvim" / "init.lua").exists()
+
+    def test_no_nvimrc_on_server(self, tmp_path, system_bootstrapper, monkeypatch):
+        system_bootstrapper.machine_type = MachineType.SERVER
+        system_bootstrapper.os = OS.LINUX
+        monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
+        system_bootstrapper.bootstrap_system()
+        assert not (tmp_path / ".config" / "nvim" / "init.lua").exists()
+
+    def test_no_nvimrc_if_no_neovim(self, tmp_path, system_bootstrapper, monkeypatch):
+        system_bootstrapper.machine_type = MachineType.WORKSTATION
+        system_bootstrapper.os = OS.OS_X
+        monkeypatch.setattr(shutil, "which", lambda x: "/some/path")
+        system_bootstrapper.bootstrap_system()
+        assert not (tmp_path / ".config" / "nvim" / "init.lua").exists()
