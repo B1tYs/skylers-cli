@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skyler-cli"
-version = "0.4.4"
+version = "0.5.0"
 description = "Skyler's toolbox of handy CLI utils"
 authors = ["bouldersky <skyarnold1@me.com>"]
 readme = "README.md"
