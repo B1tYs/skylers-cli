@@ -4,3 +4,4 @@
 This is a modular CLI tool box that I tailor to my needs over time. It includes:
 
 - A command to bootstrap all my . files onto a new workstation
+- Pretty printing DICOM files
