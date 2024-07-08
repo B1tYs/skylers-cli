@@ -4,11 +4,10 @@ from base64 import b64encode
 from enum import Enum
 from pathlib import Path
 
+import pylibmagic  # noqa: F401
 import magic
 import pydicom
 
-# noinspection PyUnresolvedReferences
-import pylibmagic  # noqa: F401
 import rich
 import typer
 
