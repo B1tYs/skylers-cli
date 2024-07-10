@@ -13,7 +13,7 @@ g() {
     if [ -s $defaultLocation ]; then
       if [ -d `cat $defaultLocation` ];
         then
-          cd $(cat /tmp/defaultTerminalLocation);
+          cd `cat $defaultLocation`);
       fi;
     fi
 }
