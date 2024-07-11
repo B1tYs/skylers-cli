@@ -12,13 +12,15 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
       - name: Install commitizen
         run: pipx install commitizen
       - name: Bump version
         run: |
-          cz bump
           git config --global user.name 'Github action'
           git config --global user.email 'githubaction@github.com'
+          cz bump
           git push --tags
   deploy:
     needs: version-bump
