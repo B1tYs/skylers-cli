@@ -39,3 +39,7 @@ version_files = [
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+target-version = ["py312", "py311", "py310"]
+include = ".*\\.py"
