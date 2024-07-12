@@ -4,38 +4,30 @@ on:
     branches:
       - master
 jobs:
-  version-bump:
-    name: Version bump
+  release:
+    needs: version-bump
     runs-on: ubuntu-latest
+    env:
+      POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
     permissions:
       contents: write
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: "0"
-      - name: Install commitizen
-        run: pipx install commitizen
+      - name: Install poetry
+        run: pipx install poetry commitizen
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          cache: poetry
       - name: Bump version
         run: |
           git config --global user.name 'Github action'
           git config --global user.email 'githubaction@github.com'
           cz bump
           git push --tags
-  deploy:
-    needs: version-bump
-    runs-on: ubuntu-latest
-    env:
-      POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.12"
-          cache: poetry
       - name: Build
         run: poetry build
       - name: Publish
