@@ -3,13 +3,13 @@ on:
   push:
     branches:
       - master
+      - '*-ci-test'
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
       POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
-    permissions:
-      contents: write
+      GITHUB_TOKEN: ${{ secrets.VERSION_BUMP_PAT }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,8 +22,6 @@ jobs:
           python-version: "3.12"
           cache: poetry
       - name: Bump version
-        env:
-          GITHUB_TOKEN: ${{ secrets.VERSION_BUMP_PAT }}
         run: |
           git config --global user.name 'Github action'
           git config --global user.email 'githubaction@github.com'
