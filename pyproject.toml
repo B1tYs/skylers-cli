@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skyler-cli"
-version = "0.7.1"
+version = "0.8.0"
 description = "Skyler's toolbox of handy CLI utils"
 authors = ["bouldersky <skyarnold1@me.com>"]
 readme = "README.md"
@@ -30,7 +30,7 @@ pytest = "^8.2.2"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.7.1"
+version = "0.8.0"
 tag_format = "$version"
 version_files = [
     "pyproject.toml:^version"
