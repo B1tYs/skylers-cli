@@ -5,7 +5,6 @@ on:
       - master
 jobs:
   release:
-    needs: version-bump
     runs-on: ubuntu-latest
     env:
       POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
