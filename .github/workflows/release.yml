@@ -22,6 +22,8 @@ jobs:
           python-version: "3.12"
           cache: poetry
       - name: Bump version
+        env:
+          GITHUB_TOKEN: ${{ secrets.VERSION_BUMP_PAT }}
         run: |
           git config --global user.name 'Github action'
           git config --global user.email 'githubaction@github.com'
