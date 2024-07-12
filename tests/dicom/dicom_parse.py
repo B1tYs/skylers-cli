@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from skyler_cli.cli import main
+from skylers_cli.cli import main
 
 
 class TestParseSingleDICOMFile:

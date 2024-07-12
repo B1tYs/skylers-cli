@@ -1,7 +1,7 @@
 import pytest
 import shutil
 
-from skyler_cli.core.bootstrap.system import SystemBootstrapper, OS, MachineType
+from skylers_cli.core.bootstrap.system import SystemBootstrapper, OS, MachineType
 
 
 @pytest.fixture

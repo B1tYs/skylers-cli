@@ -2,7 +2,7 @@ from enum import Enum
 from pathlib import Path
 import chevron
 import importlib.resources
-from skyler_cli.core.bootstrap import system_template
+from skylers_cli.core.bootstrap import system_template
 import shutil
 from os import makedirs
 
