@@ -1,4 +1,4 @@
-from skyler_cli.cli import main
+from skylers_cli.cli import main
 
 
 class TestNoArgs:

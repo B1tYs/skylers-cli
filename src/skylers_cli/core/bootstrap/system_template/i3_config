@@ -231,7 +231,7 @@ mode "workspace" {
 	bindsym Shift+z move window to workspace $ws10; mode "default"; workspace $ws10
 	bindsym Shift+x move window to workspace $ws11; mode "default"; workspace $ws11
 	bindsym Shift+c move window to workspace $ws12; mode "default"; workspace $ws12
- 
+
     # move window to a workspace but DON'T change focus to that workspace
 	bindsym Shift+ctrl+1 move window to workspace $ws1; mode "default"
 	bindsym Shift+ctrl+2 move window to workspace $ws2; mode "default"
