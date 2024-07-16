@@ -8,19 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: "0"
+          ssh-key: ${{secrets.VERSION_BUMP_SSH_PRIV_KEY}}
       - name: Install poetry
         run: pipx install poetry commitizen
       - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
-          cache: poetry
       - name: Bump version
         env:
           GITHUB_TOKEN: ${{ secrets.VERSION_BUMP_PAT }}
