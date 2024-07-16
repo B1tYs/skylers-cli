@@ -26,7 +26,8 @@ jobs:
           git config --global user.name 'Github action'
           git config --global user.email 'githubaction@github.com'
           cz bump
-          git push --all
+          git push
+          git push --tags
       - name: Build
         run: poetry build
       - name: Publish
