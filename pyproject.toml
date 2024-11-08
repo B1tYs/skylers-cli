@@ -11,7 +11,7 @@ sc = "skylers_cli.cli.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-typer = { extras = ["all"], version = ">=0.6.1,<0.13.0" }
+typer = { extras = ["all"], version = ">=0.6.1,<0.14.0" }
 chevron = "^0.14.0"
 pydicom = "^2.4.4"
 python-magic = "^0.4.27"
